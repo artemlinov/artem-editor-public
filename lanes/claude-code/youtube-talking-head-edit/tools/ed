@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Runs the toolkit with its own Python (set up by setup.sh). Usage: tools/ed <command> [args]
+HERE="$(cd "$(dirname "$0")" && pwd)"
+case "$(uname -s)" in
+  Darwin) BASE="$HOME/Library/Caches/everygen-edit" ;;
+  *) BASE="${XDG_CACHE_HOME:-$HOME/.cache}/everygen-edit" ;;
+esac
+if [ ! -x "$BASE/venv/bin/python" ]; then echo "Run tools/setup.sh first." >&2; exit 2; fi
+exec "$BASE/venv/bin/python" "$HERE/ed.py" "$@"

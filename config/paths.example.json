@@ -1,0 +1,13 @@
+{
+  "_note": "Copy to paths.local.json and fill in this machine's paths. Only file with machine paths; never committed.",
+  "drive_root": "/Users/<you>/Library/CloudStorage/GoogleDrive-<account>/My Drive",
+  "everygen_videos": "{everygen}",
+  "ssd": "/Volumes/<your SSD>",
+  "job_subfolder": "Claude Edit",
+  "everygen_sop": "{everygen}/SOP",
+  "asset_library": "{everygen}/Library",
+  "everygen": "{drive_root}/Everygen",
+  "sfx_library": "{drive_root}/SFX",
+  "current_video": "<folder of the video being edited, e.g. 13 Fable 5.2 Editing>",
+  "work_cache": "/Users/<you>/Library/Caches/everygen-editor"
+}

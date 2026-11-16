@@ -1,0 +1,26 @@
+@font-face{font-family:"EverygenNeue";src:url(fonts/EverygenNeue-Regular.woff2) format("woff2");font-weight:400}
+@font-face{font-family:"EverygenNeue";src:url(fonts/EverygenNeue-Medium.woff2) format("woff2");font-weight:500}
+@font-face{font-family:"EverygenNeue";src:url(fonts/EverygenNeue-Semibold.woff2) format("woff2");font-weight:600}
+@font-face{font-family:"Hedvig Letters Serif";src:url(fonts/HedvigLettersSerif_14pt-Regular.ttf) format("truetype")}
+:root{--eg-blue:#0075FD;--eg-blue-deep:#10305E;--eg-blue-soft:#E8F3FF;--eg-ink:#1C1E22;--eg-muted:#8B8F9A;--eg-line:#D9DBE0;--eg-paper:#F6F7FB;--eg-green:#30A46C;--eg-red:#E5484D;
+ --eg-font:"EverygenNeue",system-ui,sans-serif;--eg-serif:"Hedvig Letters Serif",Georgia,serif}
+html,body{margin:0;padding:0;background:transparent;overflow:hidden}
+.stage{position:fixed;left:0;top:0;width:1920px;height:1080px;overflow:hidden;font-family:var(--eg-font);color:var(--eg-ink);-webkit-font-smoothing:antialiased}
+.abs{position:absolute}
+/* shared full-screen look (every full-screen explainer except the progression graphic) */
+.fsbg{position:absolute;inset:0;background:
+  radial-gradient(900px 620px at 12% 10%,rgba(0,117,253,.13),transparent 70%),
+  radial-gradient(1000px 700px at 92% 95%,rgba(155,114,203,.13),transparent 70%),
+  radial-gradient(700px 500px at 80% 8%,rgba(240,138,108,.07),transparent 70%),
+  #F4F6FB}
+.fsbg::after{content:"";position:absolute;inset:0;background:radial-gradient(rgba(16,48,94,.075) 1.3px,transparent 1.5px) 0 0/30px 30px;
+  -webkit-mask:radial-gradient(1200px 800px at 50% 50%,#000 30%,transparent 85%)}
+.card{position:absolute;background:#fff;border-radius:28px;box-shadow:0 34px 90px rgba(16,48,94,.16),0 3px 10px rgba(16,48,94,.07);overflow:hidden}
+.media{position:absolute;border-radius:30px;overflow:hidden;background:#0b0c10;box-shadow:0 34px 90px rgba(16,48,94,.22),0 3px 10px rgba(16,48,94,.08)}
+.media img{width:100%;height:100%;object-fit:cover;display:block}
+.vig{position:absolute;inset:0;background:radial-gradient(ellipse 62% 120% at 0% 50%,rgba(0,0,0,.80) 0%,rgba(0,0,0,.52) 42%,rgba(0,0,0,0) 78%)}
+.vigr{position:absolute;inset:0;background:radial-gradient(ellipse 62% 120% at 100% 50%,rgba(0,0,0,.80) 0%,rgba(0,0,0,.52) 42%,rgba(0,0,0,0) 78%)}
+.badge{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;color:#fff;font-weight:600;
+  background:radial-gradient(circle at 35% 28%,#7DB8FF 0%,#2B86FF 38%,#0062E0 100%);box-shadow:inset 0 2px 3px rgba(255,255,255,.55),inset 0 -6px 10px rgba(0,40,120,.35),0 10px 24px rgba(0,98,224,.35)}
+.serif{font-family:var(--eg-serif);font-weight:400}
+.blue{color:var(--eg-blue)}

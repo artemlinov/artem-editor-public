@@ -1,0 +1,359 @@
+FONTLOG for Everygen Neue
+=========================
+
+Everygen Neue is a modified version of Overused Grotesk by Bao Nguyen
+(RandomMaerks), released under the SIL Open Font License 1.1 (see OFL.txt).
+Overused Grotesk declares no Reserved Font Name. Everygen Neue is a renamed
+derivative and may not be sold by itself.
+
+Copyright (c) 2023-2025, Bao Nguyen/RandomMaerks.
+Copyright (c) 2026 Everygen (modifications).
+
+Every outline and OpenType substitution in these files comes from Overused
+Grotesk or was produced by the transformations listed below. Since v0.300 the
+kerning is computed by Everygen from these outlines (items 29, 37, 38); no
+kerning value is inherited or copied. The pnum substitution (item 41) is the
+reverse of Overused's own tnum. No outline, point, kerning, hinting or feature
+data from any other font was used.
+
+Since v0.501 no per-glyph or per-pair number from any other font is used
+either. Some targets were chosen by measuring a reference typeface, and only
+as font-wide, class or set aggregates: stem widths, stroke contrast and bar
+thickness, vertical metrics, x-height, descender depth, class-mean advances
+(item 47), class-average sidebearings (item 24), punctuation class gaps
+(items 22 and 25), pair-category means and spreads (item 37), figure-set
+means (items 39, 40, 42, 48) and the gap between the figures and the math
+class (item 53). Versions 0.200 to 0.401 had set 20 letters to the
+reference's own advance width (items 12 and 26) and $ and % to its ink width
+for each sign (item 42). Versions 0.400 to 0.500 also set the figure-facing
+side of $, % and + from that one sign's gap to the figures (items 42 and 48).
+v0.501 removes all of that.
+
+ChangeLog
+---------
+
+2026-10-20  v0.501  Fixes found in v0.5 verification
+
+53. Signs next to figures. Items 42 and 48 set the side of $ that meets a
+   figure, the side of % that meets a figure, and both sides of the math
+   signs from the reference's mean gap between that one sign (for the math
+   signs, + alone) and the ten figures. Each of those numbers describes one
+   glyph of the reference, so they are deleted. $ and % keep Overused's own
+   sidebearings after the figure ink factor of item 48. The math signs take
+   one shift per side for the class, from the mean gap between the ten
+   figures and all five signs + - = x / (50 pairs per side).
+54. Version 0.501 in nameID 3 and 5 and head.fontRevision.
+
+2026-10-20  v0.500  Class widths; no per-glyph reference numbers
+
+47. Widths by class. Items 12 and 26 are withdrawn. Their per-glyph advance
+   targets for W M w f X G t R K Q k C & @ Y s T O e H were the reference's
+   own advances and are deleted from the build. Every letter a-z and A-Z
+   whose ink is more than a bare stem, plus & and @, now belongs to one of
+   ten classes set by how the letter is built: lowercase straight (h m n u),
+   round (a b c d e g o p q s), diagonal (k v w x y z), narrow (f j r t);
+   capital straight (B D H N P R U), round (C G O Q S), diagonal
+   (A K V X Y Z), wide (M W), narrow (E F J L T); and & @. Each class takes
+   one width factor per weight, fitted so the class's mean advance equals the
+   reference's class mean. The factor scales the ink with the stem
+   compensation of item 12, so stems keep their weight and sidebearings
+   stay. f and t stretch to the right of the stem (item 26). i, l and I
+   keep their width. Each letter's alternates take its class factor, and
+   its single-outline accented forms take the letter's own scale; composites
+   follow as in item 12. Regular factors: lowercase 1.001 / 0.998 / 1.000 /
+   1.133, capitals 1.005 / 1.036 / 1.037 / 0.928 / 0.991, & @ 0.949.
+48. $ and %. The per-sign ink widths of item 42 are deleted. Both signs now
+   take the default figure set's ink factor (item 39) on Overused's drawing.
+   The side that meets a figure is still set from the mean gap to the ten
+   figures.
+49. Spacing of G and a. Item 4 had exempted the right sides of G and a from
+   respacing because one per-glyph reference sidebearing matched. That
+   exemption is gone. a's right side keeps the classifier's result, and G's
+   right side is classed as round, which is the shape of its body.
+50. Item 24 spacing, the kerning of items 29 and 37-38, the figures, dots and
+   math signs of items 39-46 and the italics of item 31 are recomputed on
+   the new widths with the same rules and the same aggregate targets.
+51. The build is one script (build_v05.py). The older build scripts can no
+   longer produce fonts.
+52. Version 0.500 in nameID 3 and 5 and head.fontRevision.
+
+2026-10-20  v0.401  Fix found in v0.4 verification
+
+45. Math signs. Item 42 scaled + - = x / +- < > horizontally only, so
+   + was taller than wide (470 by 523 at Regular) and the arms of x were
+   no longer at 45 degrees. The class factor of item 42 now applies to both
+   axes about each sign's centre, with stem compensation in x (item 12) and
+   the same compensation for the horizontal bars in y, so bars and stems
+   keep their weight. The tabular forms of these signs take the same factor
+   and stay centred on the tabular advance.
+46. Version 0.401 in nameID 3 and 5 and head.fontRevision.
+
+2026-10-20  v0.400  Diagonal kerning, ? and !, figures
+
+37. Diagonal pairs. The kerner (item 29) took each side's looseness next to
+   neutral letters out of the kern. For a diagonal side most of that is its
+   open triangle, so pairs like A V, Y o, A T and V a kept both triangles and
+   sat 40-50 units loose. In ten pair categories (diagonal against diagonal,
+   round or open, by case, plus one category for interlocking pairs such as
+   A V, L V, A T and A v) a diagonal side now carries no bias. Each category
+   has one allowance and one factor, fitted so the category's mean and spread
+   of pair gaps equal the reference's for that weight. In these categories a
+   kern may also open a pair, by at most 30. Every collision guard of items
+   34 and 35 still applies. Italics use their upright's fitted values.
+38. Round and open letters before ? and !. Their kern now makes the gap
+   equal to this font's own gap between its straight-sided letters (n h m u,
+   H N I M U) and the same mark. No reference value is involved.
+39. Default figures stay proportional, as in the reference. One horizontal
+   scale for the set (with stem compensation, as item 12) brings their mean
+   ink width to the reference's mean; each figure's advance is pulled toward
+   the set mean so the spread matches too; one shift per side sets the mean
+   sidebearings, and a shared correction makes the mean gap between two
+   figures equal the reference's mean (which includes its figure kerning).
+   zero.slsh follows the set.
+40. Tabular figures (tnum) take the reference's tabular advance, 600 at every
+   weight, with one scale and one shift per side for the set. The tabular
+   math signs and hyphen drawn at the old tabular width are recentred on 600.
+41. pnum added: the reverse of every tnum substitution.
+42. (The $ and % part is withdrawn in v0.500, item 48.) $ and % take one horizontal scale each, sized to the reference's ink
+   width for that sign; the side that meets a figure is set from the
+   reference's mean gap to the ten figures. + - = x / +- < > share one scale
+   and two side shifts, set the same way from the class means.
+43. Dots next to figures. The right side of period and comma, and both sides
+   of colon and semicolon, are set so the kerned mean gaps between figures
+   and these classes equal the reference's (9:16, 1.5, 1,000).
+44. Version 0.400 in nameID 3 and 5 and head.fontRevision.
+
+2026-10-20  v0.301  Fixes found in v0.3 verification
+
+34. Kerning collision guard. The kerner read glyph profiles every 10 units,
+   so a bar that slipped between two scanlines went unseen: at Light the
+   F arm met the waist of a (F a kerned -140, the inks overlapped). A
+   negative kern must now also clear the minimum gap on rows read every
+   unit within 5 units of each scanline. This only moves a kern toward 0,
+   never opens a pair. Changes in the basic Latin set: Fa -140 to -82
+   (Light), c-hyphen -110 to -40 (Regular), C-hyphen -110 to -45
+   (Semibold), plus some accented members.
+35. Punctuation next to punctuation. Since item 25 the inner sides of the
+   brackets are tight, so () [] and similar pairs met at the tips. Any
+   punctuation class pair closer than the kerner's minimum gap is opened to
+   it (about 20 class pairs per font, for example () +36 to +42).
+36. Version 0.301 in nameID 3 and 5 and head.fontRevision.
+
+2026-10-20  v0.300  Spacing, kerning and italics
+
+24. Spacing system. Each side of a-z and A-Z belongs to one of eight classes
+   (straight, round, diagonal, open; lowercase and capitals). Each side first
+   moves halfway toward the value that gives its class equal white area once
+   open counters are clipped 80 units deep (at most 6 units; the right sides of
+   a, G and Q keep their value), then the whole class shifts so its average
+   visible sidebearing equals the reference class average for that weight.
+   Other glyphs with a v0.1 spacing class take their class's mean change;
+   composites follow their letters.
+25. Punctuation spacing. Dots (. , : ;), marks (! ?), closing and opening
+   quotes, brackets and dashes shift as classes so their mean gap to neutral
+   letters matches the reference; each glyph also moves halfway toward its
+   class mean. Only the sides that meet letters in running text move.
+26. Widths (withdrawn in v0.500, item 47). Y s T O e H get advance targets (horizontal scale with stem
+   compensation, as item 12). f and t now put all of their added bar length on
+   the right of the stem, so the stem no longer drifts away from the letter
+   before it.
+27. Semibold contrast. Curve points take y from a wght 15 heavier at
+   Semibold, as item 13 does (lighter) at Light.
+28. Accents. Every accented letter whose marks sit over or under the base now
+   has the base letter's advance, and accented a uses the same a as plain a
+   (v0.1's promotion had left some on the other design). Letters with a mark
+   beside or beyond the base (d-caron, l-caron, l-dot, horned U and u, degree
+   signs) keep the wider advance.
+29. Kerning, computed by Everygen. Overused's kern values are removed. For
+   every Latin letter, figure and common punctuation, side profiles are read
+   every 10 units; the gap of a pair is the mean row gap clipped 150 units
+   beyond its nearest row. A pair is kerned by 0.7 (punctuation 0.6) of its
+   difference from the median gap of neutral pairs, after each side's own
+   looseness is taken out, only ever closer (at most -140, punctuation -110).
+   Accented and alternate glyphs share their base letter's class; classes are
+   seeded from Overused's class membership and split where profiles differ;
+   a glyph whose accent reaches past its base has its own class. Any pair
+   whose inks would come within 30% of the lowercase gap is opened.
+30. Comma family, drawn by Everygen. comma, semicolon, quotesinglbase and
+   quotedblbase (and the tabular comma and semicolon) are four-point wedges
+   built like the quotes of item 16: top 4 units narrower than the period, tip 0.4 of
+   that, leaning left by 0.2 of the height, from the period's top to the old
+   comma's bottom. The old forms stay in ss03.
+31. Italic and Medium Italic. Built from Regular and Medium: sheared 10
+   degrees about y=265; o O c C s S Q and zero take 2.5 degrees of that as
+   rotation, are refitted to their original heights and recentred, so their
+   curves keep an even weight. The single-storey a (Overused's ss01) is the
+   default; ss01 gives the double-storey a. italicAngle -10, caret slope
+   1000/176, fsSelection ITALIC, macStyle italic, names EverygenNeue-Italic
+   and EverygenNeue-MediumItalic. Kerning is computed on the deslanted
+   outlines.
+32. STAT table with one wght and one ital entry per font.
+33. Version 0.300 in nameID 3 and 5 and head.fontRevision.
+
+2026-10-20  v0.201  Fix found in v0.2 verification
+
+21. Descender kinks in y and j. The descender move (item 6, item 18) picked
+   its points by testing y < -30 in each weight. In y and j one point sits
+   right at -30, so it moved in some weights and not others, and where it
+   stayed put the tail joined the stem with a visible kink (Regular, Medium
+   and Semibold y; Medium and Semibold j). The set of moved points is now
+   decided once per glyph on the wght-300 outline and used in every weight.
+   Changes y, j, dotlessj, jcaron, j.ss03 and their 15 composites in
+   Regular, Medium and Semibold. Light is unchanged. Version 0.201.
+
+22. Closing quotes spacing. The drawn wedge leans left, so a letter after
+   ’ or ” sat 15-32 units further away than the target gaps (median over
+   a-z and A-Z, shaped with kerning). The right sidebearing of quoteright
+   and quotedblright is 14 / 27 / 30 / 30 units smaller by weight. The
+   median gap after them is now within 2 units of the target.
+
+23. Quote contour direction. The drawn quotes are wound the same way as
+   every other outline in the font (they were the opposite). No visual
+   change.
+
+
+2026-10-20  v0.200  Second Everygen build (same four weights)
+
+Source and licence unchanged. Build script: scripts/build_v02.py, which reuses
+build.py's steps and adds the changes below. Every shape is still Overused
+Grotesk's own outline, transformed, except the quotes in item 16, which
+Everygen drew from scratch as plain four-point wedges.
+
+11. Weight model. The VF has wght masters at 300, 400 and 900 and no avar, so
+   each coordinate is piecewise linear in wght. v0.2 takes x for each glyph
+   and y for each point from their own wght on that line. Below 300 it
+   extrapolates the 300-400 slope. With every option off the script
+   reproduces v0.100 to within 2 units, which is rounding.
+
+12. Individual widths (withdrawn in v0.500, item 47). W M w f X G t R K Q k C, & and @ were set to fixed
+   advance targets in each weight. For f and t the parts left and right of
+   the stem stretch by the same factor, so the crossbars and the hook get
+   longer and the stem does not change. Every other glyph scales horizontally
+   about its left edge. Its x comes from a heavier or lighter wght, chosen so
+   the stem keeps its v0.1 thickness after the scale. Sidebearings keep their
+   v0.1 values. Accented composites shift their marks by the base's change in
+   centre and their advance by its change in width (28 composites per weight,
+   Cyrillic Em, Es and Ha included). Scale factors at Regular: W 0.915,
+   M 0.932, w 0.942, X 1.110, G 1.084, R 1.090, K 1.091, Q 1.062, k 1.098,
+   C 1.055, & 0.967, @ 0.925. Stretch factors: f 1.32, t 1.24.
+
+13. Light contrast. At Light, off-curve points, and on-curve points between two
+   off-curve points, take y from wght 273 instead of 300. That thins the
+   horizontal parts of curves and leaves straight bars and stems alone. The o
+   thin/thick ratio goes from 0.95 to 0.84. The H bar stays at 53.
+
+14. x-height. Every lowercase outline's y above the baseline is scaled by
+   530/538, and the y-wght is raised (+3 to +7) so horizontals keep their
+   thickness. Descenders do not move. Above-base marks on lowercase
+   composites move down by the same ratio. x-height is 530 and the ascender
+   is 743, down from 754. Cap height stays at 701.
+
+15. Cap weight. Capitals take x from wght 478 at Medium (was 470) and 564 at
+   Semibold (was 542). The H stem is now 100 and 121.
+
+16. Quotes, drawn by Everygen. quoteleft, quoteright, quotesinglbase,
+   quotereversed and their double forms are new four-point wedges. Each is
+   wider at the top, 1.12 x stem + 8, with a tip 0.40 of that width,
+   236 + 0.2 x stem tall, and leans left by 0.2 of its height. Left quotes
+   are the right quote turned 180 degrees, and reversed quotes are mirrored.
+   Top at 716, low quotes at 112, 42-unit sidebearings. The previous
+   round-dot quotes are still in ss03.
+
+17. Ampersand and at. & is narrowed (item 12). @ is cut from a lighter wght
+   (-26 / -40 / -55 / -80 by weight), so its ring is about 12% thinner than
+   the stem. It is also narrowed (item 12) and scaled 0.955 vertically about
+   its centre.
+
+18. g descender. g's tail moves down by 6, not 34. It reaches -216 next to
+   p's -210, where v0.100 had -244.
+
+19. Spacing. The Light lowercase deltas are 2 units lower per side
+   (+15/+9/-1), because the wider f, t and k would otherwise push the
+   lowercase average past its target. The other weights are unchanged.
+
+20. Version 0.200 in nameID 3 and 5 and head.fontRevision.
+
+
+2026-10-20  v0.100  First Everygen build (Light 300, Regular 400, Medium 500, Semibold 600)
+
+Source: OverusedGrotesk-VF.ttf v0.6 from the Overused Grotesk repository
+(one wght axis, 300-900, default 300). Build script: scripts/build.py.
+
+1. Weight. Each static is cut from the VF with fontTools.varLib.instancer at two
+   wght values. x coordinates come from the first, y coordinates from the
+   second (both instances are point-compatible), which keeps horizontals a
+   little lighter than verticals:
+     Light     x 305 / y 290
+     Regular   x 415 / y 400
+     Medium    x 470 / y 450
+     Semibold  x 542 / y 515
+   Advance widths and kerning come from the x instance.
+
+2. Scale. Units per em changed from 2000 to 1000 with an extra uniform x1.0769
+   (total factor 7/13), so the cap height is 701 and the x-height 538. Outlines,
+   advances, GPOS values and OS/2 / post metrics all scaled by
+   fontTools.ttLib.scaleUpem.
+
+3. Default glyphs. Overused's own alternates became the defaults, by swapping
+   outlines between the base name and the alternate name (composites follow):
+     a   <- a.spur (was cv05)      spurred a; a.ss01 <-> a.spur.ss01 likewise
+     R   <- R.ss05                 straight leg; also Racute, Rcaron, uni0156,
+                                   Cyrillic Ya (uni042F, uni044F)
+     J   <- J.ss06                 also Jcircumflex, Cyrillic Je (uni0408)
+     ss03 round dots promoted for i j . , : ; ! ? quotes, ellipsis and every
+     dotted or dieresis letter in the ss03 lookup.
+   278 glyph names changed content. Turning ss03, ss05, ss06 or cv05 on now
+   gives back the original Overused form.
+
+4. Spacing. Each side of each simple letter or figure was classified on the
+   wght-300 outline (sidebearing near 108 with a vertical segment = straight,
+   near 85 with a curve at the extreme = round; n h m right side = shoulder;
+   a, G, R, seven hand-set). Deltas in 1000-upm units, left/right per side:
+                lc straight  lc shoulder  lc round  cap straight  cap round
+     Light          +17          +11         +1         +30          +10
+     Regular        +13           +6         +1         +28          +10
+     Medium         +10           +4         -3         +25           +8
+     Semibold        +5            0         -6         +20           +7
+   Round figure sides +6. Tabular, numerator, denominator, superior/inferior
+   and enclosed figures are untouched. Composites move their marks with the
+   base letter's left delta. Kerning values unchanged.
+
+5. Space. space and no-break space set to 222 / 220 / 218 / 215.
+
+6. Descenders. In g j p q y thorn dotlessj ef (Cyrillic) and the j.ss03 and
+   y.ss07 alternates, every point below y=-30 moved down by 34 units (p now
+   reaches -210, g -244). Accented and Cyrillic composites follow.
+
+7. Vertical metrics. hhea and OS/2 typo 975 / -275 / 0 with USE_TYPO_METRICS on,
+   usWinAscent 1275, usWinDescent 310. sxHeight and sCapHeight remeasured.
+
+8. Technical clean-up. Nested composites flattened (99 glyphs) and the 7
+   composites using mirrored or rotated components (nine, uni030C, uni0311,
+   quoteleft, quotereversed, quotedblleft, uni201F) decomposed to outlines.
+   A new box .notdef drawn. The uni000A control glyph and C0/C1 cmap entries
+   removed. prep (smart dropout control) and gasp added. GDEF, fvar, gvar,
+   HVAR and STAT dropped (static fonts; the VF's GDEF held no classes).
+
+9. Naming. Family "Everygen Neue", subfamilies Light / Regular / Medium /
+   Semibold (typographic family in nameID 16/17), PostScript names
+   EverygenNeue-<Style>, version 0.100, vendor ID EVGN, manufacturer Everygen,
+   designers Bao Nguyen (RandomMaerks) and Everygen. nameID 13 holds the OFL
+   short notice and nameID 14 https://openfontlicense.org. Overused's
+   "RDMK" vendor ID and its family/unique/PostScript names were removed so
+   nothing claims the new name is theirs; their copyright line is kept.
+   Note: the VF's own nameID 0 reads 2023-2026 with an e-mail address; the
+   repository LICENSE.txt reads 2023-2025, which is the line used here.
+
+10. Web fonts. WOFF2 files are subset to Latin and Latin Extended (Basic Latin,
+   Latin-1, Latin Extended-A/B, IPA schwa, spacing modifiers, combining marks,
+   Latin Extended Additional incl. Vietnamese, punctuation, currency,
+   letterlike, arrows, math operators, Latin Extended-C/D), all OpenType
+   features kept. TTFs keep the full glyph set including Cyrillic.
+
+
+Acknowledgements
+----------------
+
+Bao Nguyen (RandomMaerks) designed Overused Grotesk:
+https://github.com/RandomMaerks/Overused-Grotesk
+Modifications: Everygen, https://everygen.ai

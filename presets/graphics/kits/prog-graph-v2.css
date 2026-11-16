@@ -1,0 +1,4 @@
+/* Pass 2 additions to prog-graph.css: groups that enter and leave around the live camera card. */
+.pgx-g{position:absolute;inset:0}
+.pgx-cam{position:absolute;overflow:hidden;background:#000}
+.pgx-cam img{position:absolute;left:0;top:0;width:100%;height:100%;display:block}

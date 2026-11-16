@@ -1,0 +1,24 @@
+/* Everygen tokens for YouTube graphics: a simplified subset of everygen.ai/design-system.
+   The website system has UI-only rules (300 ms control limit, button roles) that do not apply to video. */
+:root{
+  /* colour */
+  --eg-blue:#0075FD;        /* brand blue-9 */
+  --eg-blue-deep:#10305E;   /* blue-12, dark text on blue */
+  --eg-blue-soft:#E8F3FF;   /* blue-3, tints and washes */
+  --eg-ink:#1C1E22;         /* sand-12, primary text */
+  --eg-muted:#8B8F9A;       /* sand-9, locked / queued */
+  --eg-line:#D9DBE0;        /* sand-6, hairlines */
+  --eg-paper:#F6F7FB;       /* light background */
+  --eg-white:#FFFFFF;
+  --eg-green:#30A46C; --eg-amber:#FFB224; --eg-red:#E5484D;
+  /* type */
+  --eg-font:"EverygenNeue",system-ui,sans-serif;
+  --eg-serif:"Hedvig Letters Serif",Georgia,serif;  /* sparingly */
+  /* surfaces */
+  --eg-radius-card:26px; --eg-radius-panel:18px;
+  /* easing, from the design system's motion page */
+  --eg-ease-out:cubic-bezier(.16,1,.3,1);      /* expo-out: default entrance */
+  --eg-ease-quart:cubic-bezier(.165,.84,.44,1);
+  --eg-ease-snappy:cubic-bezier(.22,1,.36,1);
+  --eg-ease-media:cubic-bezier(.4,0,.2,1);     /* long reveals */
+}

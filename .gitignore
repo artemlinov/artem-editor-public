@@ -1,0 +1,15 @@
+**/build/
+*.mov
+*.mp4
+*.prproj
+*.wav
+.DS_Store
+.claude/settings.local.json
+.mcp.json
+.venv/
+_reference/
+build/
+config/paths.local.json
+node_modules/
+vendor/
+__pycache__/

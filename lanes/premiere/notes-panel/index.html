@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Timecode Notes</title>
+<style>
+  :root{--bg:#232323;--panel:#2b2b2b;--line:#3a3a3a;--text:#e6e6e6;--muted:#9a9a9a;--accent:#2d8ceb;--red:#e5484d}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  body{display:flex;flex-direction:column;padding:10px;gap:10px}
+  #head{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+  #tc{font:600 22px/1 ui-monospace,Menlo,monospace;letter-spacing:.02em}
+  #seq{color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55%}
+  #composer{display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px}
+  #at{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:11px;min-height:18px}
+  #at .pill{font:600 11px ui-monospace,Menlo,monospace;color:#fff;background:var(--accent);border-radius:10px;padding:1px 8px}
+  #at button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:12px;padding:0 2px}
+  #at button:hover{color:var(--text)}
+  #note{width:100%;resize:none;height:54px;background:#1c1c1c;color:var(--text);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font:inherit;outline:none}
+  #note:focus{border-color:var(--accent)}
+  #hint{color:var(--muted);font-size:10.5px}
+  #list{flex:1;overflow:auto;display:flex;flex-direction:column;gap:2px;margin:0 -4px;padding:0 4px}
+  .row{display:flex;gap:8px;align-items:flex-start;padding:6px;border-radius:6px}
+  .row:hover{background:var(--panel)}
+  .row .t{font:600 11.5px ui-monospace,Menlo,monospace;color:var(--accent);cursor:pointer;white-space:nowrap;padding-top:1px}
+  .row .t:hover{text-decoration:underline}
+  .row .x{flex:1;word-break:break-word;white-space:pre-wrap}
+  .row .x[contenteditable="true"]{outline:1px solid var(--accent);border-radius:4px;padding:0 3px;background:#1c1c1c}
+  .row .del{opacity:0;background:none;border:0;color:var(--muted);cursor:pointer;font-size:14px;line-height:1;padding:0 2px}
+  .row:hover .del{opacity:1}.row .del:hover{color:var(--red)}
+  #empty{color:var(--muted);text-align:center;margin-top:24px;font-size:12px}
+  #foot{display:flex;gap:6px;align-items:center}
+  #foot button{border:0;border-radius:6px;padding:8px 10px;font:600 12px inherit;cursor:pointer}
+  #copy{flex:1;background:var(--accent);color:#fff}
+  #copy:disabled{opacity:.4;cursor:default}
+  #clear{background:var(--panel);color:var(--muted);border:1px solid var(--line)!important}
+  #clear:hover{color:var(--red)}
+  #count{color:var(--muted);font-size:11px;min-width:56px;text-align:right}
+  #toast{position:fixed;left:50%;bottom:58px;transform:translateX(-50%);background:#111;color:#fff;padding:6px 12px;border-radius:14px;font-size:12px;opacity:0;transition:opacity .2s;pointer-events:none}
+  #toast.on{opacity:1}
+</style>
+</head>
+<body>
+  <div id="head"><div id="tc">--:--:--:--</div><div id="seq">No sequence</div></div>
+  <div id="composer">
+    <div id="at"><span>Note at</span><span class="pill" id="atTc">playhead</span><button id="regrab" title="Use the current playhead">↻</button></div>
+    <textarea id="note" placeholder="Type a note… (the timecode is taken when you start typing)"></textarea>
+    <div id="hint">Enter adds · Shift+Enter new line · Esc clears · click a timecode to jump · double-click a note to edit</div>
+  </div>
+  <div id="list"></div>
+  <div id="foot"><button id="copy">Copy all</button><button id="clear" title="Delete all notes on this sequence">Clear</button><span id="count"></span></div>
+  <div id="toast"></div>
+  <textarea id="clip" style="position:fixed;left:-9999px;top:0"></textarea>
+  <script src="CSInterface.js"></script>
+  <script src="notes.js"></script>
+</body>
+</html>
