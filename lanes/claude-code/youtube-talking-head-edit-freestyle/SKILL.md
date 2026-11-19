@@ -84,6 +84,10 @@ change (in, out, reveal, layout switch, cut) starts on one, never mid-clause, so
 
 **Cut tight.** Dead air and breaths make a video feel slow. Frame counts here are at 30 fps; at other frame rates,
 keep the same time.
+- Find each edge from the line's own first and last word, located in a word-timed transcript of that moment, never
+  from the rough times of a whole-file transcript: those are often 0.1-0.4 s off, and where the speaker runs straight
+  from one attempt into the next, a cut placed from them lands inside a word (the tail of the attempt before plays
+  first, or the last word is cut short). Right after another word, the cut goes in the gap or dip between the two.
 - Sound: in about 1 frame before the speech starts, out 1-4 frames after it ends. Keep each word's attack and decay:
   cut where the level falls below about -50 dB (or about 6 dB above the recording's own noise floor, if that is
   higher), never inside a soft word ending. The end of a line is not its first dip: a last consonant (the "-ts" of
@@ -101,10 +105,16 @@ keep the same time.
   section, a joke, or a vulnerable line. It gets about 0.2 s more silence after it. Nothing else gets extra room: a
   visual never needs it, and neither does a tease of something that comes later in the video. A silence the viewer
   can feel is too long. Where the picture cuts inside that room follows the blink rule: if the A-roll can't hold
-  through it without a blink, the next visual covers it.
+  through it without a blink, the next visual covers it. Where the take has no silence after the line, take the room
+  from before the next line instead. The room ends before a blink or a look away: check its frames.
 - Every audio cut gets a short constant-power crossfade (about 4 frames), centered on the cut, so cuts don't click.
 
-Prove the cut: transcribe every changed clip and compare it with the script. Every word must be there, whole.
+Prove the cut: transcribe every changed clip and compare it with the script. Every word must be there, whole. Also
+transcribe it once without a prompt of names: a prompt makes the speech model tidy up repeats, and a stutter, a
+restart, or the end of another attempt leaking in at an edge must show. Finish this before you build any visual: a cut
+changed later moves every frame after it. A cut problem found late is still fixed in the cut (then move the visuals
+whose frames changed); never mute or patch the voice track or the mix to hide it, which leaves silence while the
+speaker's mouth moves.
 
 ## Phase 3 · Story map
 
@@ -117,9 +127,16 @@ line gets, and the song for each block.
   other new layout you design. A music switch alone over A-roll is weak; without both, a ten-minute video feels like one long sentence.
 - **Beats** are the steps inside a block. A new beat gets a visual change; use full-screen visuals to change the pace
   and move away from the A-roll.
+- **Vary the layout all the time**: full-screen A-roll, overlays on the A-roll, full-screen visuals, screen + A-roll.
+  A long run of one layout (screen + A-roll above all) feels lazy. Transitional, emotional, opinion and reassurance
+  lines go to full-screen A-roll; the screen comes back for what is done on screen. One focus per phrase.
+- A sentence recorded in parts (commas in the script, not full stops) gets short, comma-length pauses between them.
 - **The intro teases the value** by foreshadowing visuals from later in the video, so viewers see what they'll get.
   Build the foreshadow exactly as the visual will appear later. A tease card (what something cost, what's coming)
   stays readable: show what it is and hide only the answer. A frosted or blurred tease card just confuses.
+- **Every tease gets a visual**, anywhere in the video. "That's exactly what I fixed", "in a few minutes I'll show you
+  how": said over the speaker alone, a promise like that is vague. Show a glimpse of the thing promised (the result,
+  the tool, the before and after), so the viewer knows what they're waiting for.
 
 **The look.** Decide it before you design anything, and keep one visual language through the whole video; the music
 changes from block to block (Phase 5).
@@ -177,7 +194,18 @@ makes a claim believable.
 - Tell the speaker's argument as a small story. When a line puts the wrong way next to the right way, show the wrong
   way first, then turn that same thing into the right way as the sentence goes on. Small, believable details make it
   land.
-- Full-screen visuals default to the whole sentence; never start one mid-clause.
+- Full-screen visuals default to the whole sentence; never start one mid-clause. But a visual starts with something
+  to show: when what it shows only comes later in the sentence ("But before you try that prompt yourself, you should
+  know..."), keep the speaker until then and start the visual on the joint just before it (a pause where a comma would
+  go counts), so it never opens on an empty background waiting for its content.
+- When a line's idea is too thin to fill the screen (one number, one logo, a short phrase), show it over the A-roll
+  beside the speaker, not as a full-screen visual with a lone element on a background.
+- What the speaker looks at or points at, the viewer sees. When they read off their screen, glance at something or
+  point at it, show that thing (the screen recording, the page, the object) while they do; never leave the viewer
+  watching someone look at something they can't see.
+- A powerful phrase (the line the section builds to, a bold claim, a punchline, usually one you gave room) gets its
+  words on screen: the phrase itself as big, clean text beside the speaker, appearing as it's said. Few words, and
+  only for the lines that carry the video, so it stays special.
 - A graphic's parts come in in the order the eye should read them, so the viewer is guided through it.
 - Centered at every moment, not only in the final layout. What is on screen alone is centered and sized for the space
   it has; when a new element arrives, the layout moves to make room. Never leave empty space waiting for something
@@ -239,6 +267,8 @@ steps already done are checked off and dimmed. It never shows every step readabl
   frame or under the speaker. A strong zoom is fine while that holds.
 - A newly opened window or page is shown whole first; then move in. Come back to the whole window before going to the
   next target, and rest there whenever nothing needs pointing at (a message just sent, a page working).
+- What the speaker selects, highlights or types stays whole inside the frame for the whole action, as the selection
+  grows: check a frame at the end of the action, not only the start, and move so all of it fits.
 - A detail in a corner of the window (a toggle, a small control) gets a magnifying glass, held for the whole phrase
   it belongs to, not a zoom that would push it to the frame edge.
 - Time-lapse long waits (a page loading, a render running). Where the recording runs longer than the line over it,
@@ -269,7 +299,8 @@ generate; line their pockets up once the cut is final.
   calm style overpowers when its arrangement is dense, and so do a song's own build-ups and climax: under speech,
   use a part that holds steady.
 - The hook's song holds tension: suspenseful and curious, so the viewer wants to know what happens next, while staying
-  calm and steady under the voice. Never cheerful, bouncy or scary. Later blocks can relax.
+  calm and steady under the voice. Never cheerful, bouncy or scary. Later blocks can relax. A course or tutorial video
+  is the exception: its hook gets a confident, lighthearted song, still steady and never goofy.
 - Instrumental only: no vocals, vocal chops or spoken samples, since any voice competes with the speaker. Ask for that
   when you generate, and check every song anyway: generated songs often open with a spoken tag or a voice sample even
   when asked for none. Transcribe each song on its own before using it (a rough check: speech-to-text is unreliable on

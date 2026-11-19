@@ -33,6 +33,8 @@ def diff(want, heard):
         A, B = w[a0:a1], h[b0:b1]
         if op == "replace" and len(A) == len(B) and all(same(x, y) for x, y in zip(A, B)):
             continue
+        if op == "replace" and difflib.SequenceMatcher(None, "".join(A), "".join(B)).ratio() >= 0.85:
+            continue                                  # only spaced differently: "over edited" / "overedited"
         if A:
             missing.append(" ".join(A))
         if B:

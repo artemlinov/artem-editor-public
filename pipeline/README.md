@@ -41,13 +41,14 @@ Artem only says which video and where the camera file is. Claude does the rest, 
 - `new-project.py`: the video's Premiere project and sequence (see Starting a video).
 - `dump-live.py`: the live sequence, every clip and property, to `work/dump.json`. Run before every apply: Artem edits between rounds.
 - `relay.py`: applies `work/relay-plan.json`. Moves everything after T0, re-lays the A-roll piece by piece, fixes crossfades. A piece may name another camera file (`path`), and the plan may list clips to remove. It re-lays V1 from T0, so clip-level settings there (a punch-in scale) must be put back after.
-- `ripple.py T:frames:tail|head`: more room after (or before) a line, without breaking what follows. `--close <T>` closes a hole on V1 that ends at T. `--hygiene` only fixes crossfades.
+- `ripple.py T:frames:tail|head`: more room after (or before) a line, without breaking what follows. `--close <T>` closes a hole on V1 that ends at T. `--tighten <T>:<frames>` shortens that hole by some frames instead (a chapter gap landing on a music beat). Moving hundreds of clips takes Premiere over 15 minutes: the bridge times out while Premiere keeps working, so wait and read the timeline before the next write. `--hygiene` only fixes crossfades.
 - `swap-take.py T:srcIn:srcOut`: replaces ONE A-roll clip with another stretch of the camera file (another take, other edges) and ripples what follows. Use it instead of `relay.py` once Artem has worked on the timeline: nothing else on V1/A1 is re-laid, so his clip settings stay. Lists the clips that span the join (a song, a graphic) for re-timing.
 - `place-rows.py rows.json`: lays graphics, music or sounds frame-exact, then reads them back.
 - `zoom-keys.py <t0>:<t1>:<scale>`: a small eased push-in on the A-roll over a breath or pause, anchored between his eyes.
 - `sfx-tracks.py cues.json`: puts each sound on the first free SFX track, then `place-rows`.
 - `prproj-audit.py`: Clip Gain and every transition, read straight from the saved project file.
 - `relink.py "<old folder>" … "<new folder>"`: after a video's folder moved or was merged back, points every project item at the same file under the new folder. Its header has the whole no-offline procedure (copy, open from the new place, relink, dump, only then remove the old folder).
+- `notes-panel/` (Timecode Notes): Artem's panel for leaving notes on the playhead, one list per sequence, to paste into a chat. Window > Extensions > Timecode Notes. `notes-panel/install.sh` puts it into Premiere; run it again whenever this repo's folder moves (the link it makes points at the folder), then restart Premiere.
 
 **Graphics** (`pipeline/graphics/`, engine in `presets/graphics/_lib/`)
 - `scene-build.py spec.json`: a screen + A-roll scene page (camera, time-lapse, his card).

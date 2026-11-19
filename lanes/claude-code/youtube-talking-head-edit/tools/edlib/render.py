@@ -63,6 +63,10 @@ async def _chunk(pw, url, frames, scale, alpha, card, fps, out):
                            "-c:v", "png" if alpha else "mjpeg", "-i", "-", "-c:v", "copy", out], stdin=subprocess.PIPE)
     cards = {}
     shot = {"type": "png", "omit_background": True} if alpha else {"type": "jpeg", "quality": 93}
+    # Draw the frame before this part once, unsaved: a page that measures or sets something on one call and relies on it
+    # the next (a caption centered before its text is changed) would otherwise jump on the first frame of every part.
+    await pg.evaluate("f => { try { return window.renderFrame(f) } catch (e) {} }", frames[0] - 1)
+    await pg.evaluate(WAIT)
     for f in frames:
         await pg.evaluate("f => window.renderFrame(f)", f)
         await pg.evaluate(WAIT)

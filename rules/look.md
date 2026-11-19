@@ -45,3 +45,41 @@
 
 **Why:** stated by Artem 2026-11-07, updated 2026-11-08; centering at every moment from his video 12 round-4 review (2026-11-10).
 **How to apply:** every graphic/edit decision for Everygen videos. 
+- From the video-14 test of the everyday skill (video-13 footage, his notes 2026-11-17):
+  - What he looks at or points at is on screen while he does it: reading a line off his screen (4:45, 5:43) with no
+    screen in view leaves the viewer watching him look at something they can't see.
+  - A full-screen visual starts with its content: when the thing it shows only comes later in the sentence, keep the
+    A-roll and start the visual on the comma-joint just before it ("But before you try that prompt yourself, | you
+    should know..."), never on a blank background waiting (6:38).
+  - Every tease gets a visual: "that's exactly what I fixed", "in a few minutes I'll show you how" over the A-roll alone
+    is vague (7:02).
+  - Too little for a full screen (one number, a short phrase): an overlay beside him on the A-roll instead of a lone
+    element on a background (7:32).
+  - A powerful phrase gets its words on screen as creative subtitles, on top of the room it already gets (6:04 had the
+    right silence after it; the text was missing).
+  - A selection or highlight he makes in a screen recording stays whole in the frame to the end of the action (2:05:
+    the highlighted colours were cut off).
+- From the looks he approved before video 14's edit (2026-11-18):
+  - A graphic built beside his camera card must also work as an overlay on his full-screen camera ("you might need to show the
+    table on top of my a-roll as an overlay for the sake of pacing… not just alongside the camera window"): design one component
+    with both modes (the overlay compact, on the side he leaves free, over the soft dark vignette).
+  - Person avatars: the figure's shoulders run out of the circle's bottom edge ("I don't like this empty space below the grey
+    figure"). A generic role never gets his own face ("remove my avatar from DIY, and make the same avatar as for the first two,
+    but in blue"): the same figure, recoloured.
+  - Chapter breaks of a course-style video (his pick of four): one row of big step cards the camera travels along, the same row
+    returning at every break (the finished card ticked, a mini-map of dots), with a silence in his voice there.
+- From his pass-2 notes on video 14 (2026-11-19):
+  - Never reuse another creator's graphics, even when he hands them over as the reference ("If we reuse these then we're going to
+    be shitting on that person"): build our own look-alikes that carry the same idea.
+  - A screen scene must look like a real screen recording of the real app, never a mockup or a floating card ("this should look
+    like an actual screen recording"); point at a part of the real UI by zooming into it. The cursor is always on top (never under
+    a folder or covered), rests on empty space, and moves at real speed (a slowed recording makes it lag). A highlight never cuts
+    off text. When the viewer could lose track of where we are, show it the way the app does (the folder highlighted in the
+    Finder sidebar).
+  - His camera never freezes: a card that plays it keeps playing the live A-roll through every transition.
+  - Design precision is checked, not assumed: equal gaps between elements of one kind, identical sizes and corner radii,
+    balanced white space top and bottom, real logos (a real TikTok logo, not a stand-in). He spots all of these.
+  - A hook's first line can open on a zoom into his A-roll with a white card beside him that captures exactly what he says
+    (eyebrow, big title, a time chip), like "Build Your First AI Agent in 20 Minutes".
+  - A concept that runs through a section keeps one icon (the office = a house: on the memory card, next to the folder, next
+    to its name once opened).

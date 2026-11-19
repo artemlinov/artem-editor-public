@@ -17,6 +17,8 @@ Which file, how loud and which slice of it is Artem's (video 12's final timeline
   type          Macbook typing from 1.535 s, -12 dB            cut to exactly t..end
   key           one Macbook key, first 0.4 s, -8 dB            a paste, a switch between screen scenes
   enter         Enter hard press, first 0.7 s, -5 dB           a send
+  error         Epidemic "Back, Return, Negative" click, -12 dB  a subtle error (a muted or failing icon)
+  sweep         SHIM, as baked                                 a light sweep across a card (chapter breaks)
 
 Timing: the sound's own transient (its loudest 10 ms inside the slice) lands ON t. So t is the frame a UI element
 becomes readable, and for a real click or key the frame of the press itself, a frame or two before what it causes.
@@ -42,6 +44,9 @@ MAP = {  # kind: (file, dB, in, len)
     "type": (L("Epidemic Sound", "Keyboard, Macbook Pro 2017, Typing, Fast.wav"), -12, 1.535, None),
     "key": (L("Epidemic Sound", "Keyboard, Macbook Pro 2017, Various, Characters, Single.wav"), -8, 0, .4),
     "enter": (L("Artlist", "Computer Keyboard Enter Button Hard Press.wav"), -5, 0, .7),
+    # video 14 pass 2: "a subtle error sound" on a muted / failing icon; the light sweep across a chapter card
+    "error": (L("Epidemic Sound", "ES_Button Press Click, Tap, Video Game, Back, Return, Negative - Epidemic Sound.wav"), -12, 0, None),
+    "sweep": (B("set", "SHIM.wav"), 0, 0, None),
 }
 # Artem, video 13 pass 2: "You're overusing this specific click throughout the video and it is also a bit too loud.
 # I would decrease it by maybe 3 dB", and alternate it with similar ones. So a pop or a click rotates through a few

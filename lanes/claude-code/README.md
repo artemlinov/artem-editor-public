@@ -64,7 +64,14 @@ roughly how long it takes (about an hour for a 10-minute video) and reports once
   out of a screen recording).
 - **Time:** video 14's tests of the everyday skill (a 10-minute video from a 51-minute raw take): run 1 took 81
   minutes; run 2 2h48m (takes and cut 43, visuals 20, render and composite 29, fixes 15, a failed save into a synced
-  folder 36). The toolkit's own timings are in `tools/README.md`. Motion blur is left out of the everyday skill on
+  folder 36). Run 3 (2026-11-16, first run with the toolkit, a fresh macOS user, video-13 footage: 11:22 out of 50
+  minutes of raw recording) took 1h42m from the log: first-time setup 7, transcription 5, takes and cut 26, story,
+  look, graphics and music 47, final build, self-review and fixes 17. It was judged a much better edit; its cut mistakes
+  came from edges placed off the transcript's rough times and from the names prompt hiding repeats (both fixed
+  2026-11-17), plus Claude muting a stumble it found late instead of re-cutting (now forbidden in the skill). The
+  toolkit's honest win is consistency (tested mechanics every run, fixes reach every user), not a proven speed-up:
+  most of the time is Claude's own thinking and designing. The toolkit's own timings are in `tools/README.md`.
+  Motion blur is left out of the everyday skill on
   purpose: it renders every frame about 10 times, which in testing took most of the time for two short scenes.
 
 ## What is deliberately not in it

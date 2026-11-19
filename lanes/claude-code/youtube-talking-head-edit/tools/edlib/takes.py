@@ -176,6 +176,192 @@ def _skip_blips(e, on, thr, speech, limit, within=0.6):
     return max(on, keep * H)
 
 
+# ---------------------------------------------------------------- in and out points from the line's own words
+# The rough times in takes.json come from the transcript and are often 0.1-0.4 s off. Where the speaker runs straight
+# from one attempt into the next, a cut placed from them lands inside a word: the tail of the attempt before plays at
+# the start of the line, or the line's last word is cut short. So each edge is found from the line's own first and last
+# word, located in a fresh word-timed transcript of that moment, then placed exactly on the sound.
+
+def _raw(s):
+    import re
+    return re.findall(r"[a-z0-9']+", s.lower().replace("\u2019", "'"))
+
+
+def _words_in(jb, x0, x1, lang):
+    """Verbatim word times (source seconds) in x0..x1: [(word, start, end)], each word as raw lowercase tokens."""
+    x0 = max(0.0, x0)
+    _, ws, _ = stt.transcribe(A.clip16(jb, x0, x1, PAD), language=lang)
+    out = []
+    for w in ws:
+        for n in _raw(w["w"]):
+            out.append((n, x0 + w["s"] - PAD, x0 + w["e"] - PAD))
+    return out
+
+
+def _find(W, tw, at, first):
+    """Index in W of the line's first (or last) word near `at`. Among the places where the line's opening (closing)
+    words are said, the one that goes on (came before) with most of the line wins, so a restart is skipped."""
+    best = None
+    for k in range(len(W)):
+        if not T.same(W[k][0], tw[0 if first else -1]):
+            continue
+        n = 0
+        while n < min(4, len(tw)):
+            i, j = (k + n, n) if first else (k - n, len(tw) - 1 - n)
+            if 0 <= i < len(W) and T.same(W[i][0], tw[j]):
+                n += 1
+            else:
+                break
+        if n < min(2, len(tw)):
+            continue
+        d = abs(W[k][1 if first else 2] - at)
+        if d <= 0.9 and (best is None or (n, -d) > best[0]):
+            best = ((n, -d), k)
+    return None if best is None else best[1]
+
+
+def _anchor(jb, a, b, text, lang):
+    """((first word start, first word end, end of the word before or None), (last word start, last word end, start of
+    the word after or None)), either None where that word can't be found near the rough time."""
+    tw = _raw(text)
+    if not tw:
+        return None, None
+    W = _words_in(jb, a - 1.2, a + 1.8, lang)
+    k = _find(W, tw, a, True)
+    head = None if k is None else (W[k][1], W[k][2], W[k - 1][2] if k > 0 else None)
+    W = _words_in(jb, b - 1.8, b + 1.2, lang)
+    m = _find(W, tw, b, False)
+    tail = None if m is None else (W[m][1], W[m][2], W[m + 1][1] if m + 1 < len(W) else None)
+    return head, tail
+
+
+def _dip(e, a0, a1, last):
+    """Where two words run together, the dip between them: scanning away from the word being kept (from the left for
+    an out point, from the right for an in point), the first dip at least 10 dB under that word's level, cut in the
+    middle of its bottom. The short silences inside the next word (the tt of "better") come later in the scan."""
+    a0, a1 = max(0, a0), min(len(e), a1)
+    if a1 - a0 < 3:
+        return a0
+    sm = np.convolve(e[a0:a1], np.ones(3) / 3, mode="same")
+    n = len(sm)
+    for i in (range(n - 2, 0, -1) if last else range(1, n - 1)):
+        if sm[i] <= sm[i - 1] and sm[i] <= sm[i + 1]:
+            ref = sm[i + 1:].max() if last else sm[:i].max()
+            if ref - sm[i] >= 10:
+                j0 = i
+                while j0 > 0 and sm[j0 - 1] <= sm[i] + 3:
+                    j0 -= 1
+                j1 = i
+                while j1 < n - 1 and sm[j1 + 1] <= sm[i] + 3:
+                    j1 += 1
+                return a0 + (j0 + j1) // 2
+    return a0 + int(np.argmin(sm))
+
+
+def _in_at(e, lv, ws, w0e, pe):
+    """In point: the attack of the first word. Its voiced part is found (20 ms within 20 dB of the speech level), after
+    the first real gap past the word before if there is one, then the in point walks back through the sound joined to
+    it. After silence, a soft start, or a longer sound just before a short stop (the s of "step"), stays; a click or
+    breath before a gap goes. Right after another word, any gap is the boundary, and with no gap at all the cut goes
+    in the last dip before the word."""
+    H = A.HOP; thr = lv["in"]
+    near = pe is not None and ws - pe < 0.6
+    lo = max(0, int(((pe - 0.08) if pe is not None else ws - 0.6) / H))
+    k = max(lo, int(max(ws - 0.1, 0.0) / H))
+    if pe is not None:                               # past the word before: after its first real gap, if any
+        g, q = int((pe - 0.05) / H), 0
+        while g < int((ws + 0.35) / H) and g < len(e):   # the transcript often starts the word too early
+            q = q + 1 if e[g] <= thr else 0
+            if q * H >= 0.015:
+                while g < len(e) and e[g] <= thr:
+                    g += 1
+                k = max(k, g)
+                break
+            g += 1
+        else:
+            k = max(k, int((pe + 0.02) / H))
+    stop = min(len(e) - 4, int((w0e + 0.15) / H))
+    if k >= stop:
+        return None
+    strong = (lv.get("speech") if lv.get("speech") is not None else -22) - 20
+    while k < stop and e[k:k + 4].min() < strong:      # 20 ms within 20 dB of the speech level: a short, quiet
+        k += 1                                        # first word ("It") counts; a breath or click doesn't
+    if k >= stop:
+        return None
+    runs, s = [], None
+    for x in range(lo, k + 1):
+        act = x == k or e[x] > thr
+        if act and s is None:
+            s = x
+        elif not act and s is not None:
+            runs.append((s, x)); s = None
+    runs.append((s, k + 1))
+    keep = runs[-1][0]
+    for r0, r1 in reversed(runs[:-1]):
+        gap, length = (keep - r1) * H, (r1 - r0) * H
+        if gap < 0.015 or (not near and length >= 0.06 and gap < 0.08):
+            keep = r0
+        else:
+            break
+    if near and k > lo and (keep <= lo + 1 or keep * H < pe - 0.03):
+        keep = _dip(e, lo, k, last=True)              # walked back into the word before: cut between the two
+    return keep * H
+
+
+def _out_at(e, lv, wls, we, ns):
+    """Out point after the last word: past its decay and any soft last consonant (the release of a final t or k after
+    its short silence), never into the next word. With no pause before the next word, the cut goes in the dip between
+    them. Returns (seconds, ran on)."""
+    H = A.HOP; ti, to = lv["in"], lv["out"]
+    lim = min(len(e) - 1, int((max(ns - 0.02, we + 0.15) if ns is not None else we + 0.5) / H))
+    j = int(we / H)
+    if _active(e, j, ti):
+        k = j; quiet = 0
+        while k < lim:
+            k += 1
+            quiet = quiet + 1 if not _active(e, k, ti) else 0
+            if quiet * H >= 0.04:
+                break
+        if quiet * H < 0.04:
+            a0 = int((we - 0.05) / H)
+            a1 = min(len(e), int(((ns + 0.2) if ns is not None else we + 0.3) / H))
+            return (_dip(e, a0, a1, last=False) * H if a1 > a0 else we), True
+        last = (k - quiet + 1) * H
+    else:
+        k = j
+        while k > int(wls / H) and not _active(e, k, ti):
+            k -= 1
+        last = (k + 1) * H
+    end = int(last / H); k = end; quiet = 0; stop = min(int((last + 0.25) / H), max(lim, end + 1))
+    while k < stop:
+        if _active(e, k, to):
+            end = k; quiet = 0
+        else:
+            quiet += 1
+            if quiet * H >= 0.1:
+                break
+        k += 1
+    if k >= int((last + 0.25) / H) and quiet * H < 0.1:
+        end = int(last / H)                          # never went quiet: a breath or the next line, not a consonant
+    off = end * H + 3 / 30
+    if ns is not None:
+        off = min(off, max(last, ns - 0.04))
+    return off, False
+
+
+def _repeats(text, heard):
+    """Words of the line heard more times than the line says them (a stutter, a restart, or the end of another attempt
+    leaking in at an edge), or None. A word only spelled differently ("Claude2" for "Claude too") isn't a repeat."""
+    tw, hw = T.words(text), T.words(heard)
+    for chunk in T.diff(text, heard)[1]:
+        for w in chunk.split():
+            if len(w) < 3 or not any(T.same(w, t) for t in tw):
+                continue
+            if sum(T.same(w, h) for h in hw) > sum(T.same(w, t) for t in tw):
+                return chunk
+    return None
+
+
 def next_onset(e, t, thr, within=1.0):
     H = A.HOP; k = int(t / H)
     while k < int((t + within) / H) and k < len(e):
@@ -229,7 +415,7 @@ def cut(jb, takes_path, prompt=None):
     lv = jb.meta.get("levels") or A.extract(jb)
     e = A.env(jb); fps = jb.fps; lang = jb.meta.get("language")
     xf = 2                                            # crossfade frames on each side of a join (4 in all)
-    items, report, tl = [], [], 0
+    items, report, tl, carry = [], [], 0, 0.0
     for ln in lines:
         lid = ln["id"]
         if ln.get("clip"):                            # a played clip with its own picture and sound
@@ -239,20 +425,36 @@ def cut(jb, takes_path, prompt=None):
             items.append({"id": lid, "kind": "clip", "file": os.path.abspath(ln["clip"]), "src_s": [a, b],
                           "tl": [tl, tl + n], "audio": info["audio"]})
             report.append(f"{lid:6} clip  {n} frames  {os.path.basename(ln['clip'])}")
-            tl += n; continue
+            tl += n; carry = 0.0; continue
         a, b = ln["src"]
+        text = ln.get("text", "")
         nxt = next_onset(e, b + 0.12, lv["in"], 1.2)
-        on, off, runon = edges(e, a, b, lv, nxt)
-        on = in_point(jb, e, lv, on, off, ln.get("text", ""), lang)
-        cuts =dead_air(e, on, off, lv["in"]) + [tuple(d) for d in ln.get("drop", [])]
+        on0, off0, run0 = edges(e, a, b, lv, nxt)    # from the sound alone: used where a word can't be found
+        head, tail = _anchor(jb, a, b, text, lang) if text else (None, None)
+        x = _in_at(e, lv, *head) if head else None
+        on = x if x is not None else in_point(jb, e, lv, on0, off0, text, lang)
+        off, runon = _out_at(e, lv, *tail) if tail else (off0, run0)
+        notes = []
+        if off - on < 0.2:
+            on, off, runon = on0, off0, run0
+            notes.append("its first and last word weren't found where src says: check src")
+        if runon:
+            notes.append("no pause after the last word: cut in the dip before the next one")
+        if carry:                                     # room the line before couldn't get: as silence before this one
+            k = int(on / A.HOP); q = 0
+            while q * A.HOP < carry and k - q - 1 > 0 and e[k - q - 1] <= lv["in"]:
+                q += 1
+            on -= max(0.0, q * A.HOP - 0.02)
+            carry = 0.0
+        cuts = dead_air(e, on, off, lv["in"]) + [tuple(d) for d in ln.get("drop", [])]
         pieces = subtract((on, off), cuts)
-        notes = ["runs straight on into more words after the out point (no pause to cut in)"] if runon else []
         room = float(ln.get("room", 0))
         if room:
             nx = next_onset(e, pieces[-1][1], lv["in"], room + 0.3)
             ext = room if nx is None else max(0.0, min(room, nx - pieces[-1][1] - 0.05))
             if ext < room - 0.02:
-                notes.append(f"room cut to {ext:.2f}s (speech follows)")
+                carry = room - ext
+                notes.append(f"room: {ext:.2f}s after it (speech follows), the rest before the next line")
             pieces[-1] = (pieces[-1][0], pieces[-1][1] + ext)
         fr = []
         for s0, s1 in pieces:
@@ -289,6 +491,12 @@ def cut(jb, takes_path, prompt=None):
         if it["text"]:
             miss, extra, r = T.diff(it["text"], heard)
             it["check"] = {"missing": miss, "extra": extra, "ratio": r}
+            # the names prompt makes the speech model tidy up repeats; listen again without it for stutters and
+            # restarts, and for the end of another attempt leaking in at either edge
+            verb, _, _ = stt.transcribe(np.concatenate([z, x, z]), language=lang, words=False)
+            rep = _repeats(it["text"], verb)
+            if rep:
+                it["notes"].append(f"SAID TWICE? \"{rep}\" in: \"{verb[:100]}\"")
         # a later take hiding right after the out point?
         last_src = it["pieces"][-1]["src"][1] / fps
         on = next_onset(e, float(last_src), lv["in"], 0.6)
@@ -316,7 +524,8 @@ def cut(jb, takes_path, prompt=None):
         if it["kind"] != "aroll":
             continue
         c = it.get("check") or {}
-        flag = "OK   " if not (c.get("missing") or c.get("extra") or any(n.startswith("LATER") for n in it["notes"])) else "CHECK"
+        flag = "OK   " if not (c.get("missing") or c.get("extra") or
+                                  any(n.startswith(("LATER", "SAID TWICE")) for n in it["notes"])) else "CHECK"
         bits = []
         if c.get("missing"):
             bits.append("missing: " + " / ".join(c["missing"]))
@@ -389,20 +598,36 @@ def _voice(jb, items, total, xf):
 
     def joined(p, q):                                 # q follows p on the timeline and in the recording: one sound
         return p is not None and q is not None and p["src"][1] == q["src"][0] and p["tl"][1] == q["tl"][0]
+    e = A.env(jb); thr = jb.meta.get("levels", {}).get("in", -50)
+
+    def quiet(t0, t1):                                # the crossfade may reach past a cut only into silence
+        i0, i1 = int(max(0.0, t0) / A.HOP), int(t1 / A.HOP) + 1
+        return i1 <= i0 or float(e[i0:i1].max()) <= thr
+    nf = int(0.008 * SR); sin_, sout = _cp_fade(nf)  # where it can't: a short fade inside the line, no click
     for k, p in enumerate(seq):
         if p is None:
             continue
+        a_s, b_s = p["src"][0] / fps, p["src"][1] / fps
         lo = 0 if k > 0 and joined(seq[k - 1], p) else ov            # no crossfade where the sound simply continues
         hi = 0 if k + 1 < len(seq) and joined(p, seq[k + 1]) else ov
-        s0 = int(p["src"][0] / fps * SR) - lo; s1 = int(p["src"][1] / fps * SR) + hi
+        short_in = short_out = False
+        if lo and not quiet(a_s - ov / SR, a_s):
+            lo, short_in = 0, True
+        if hi and not quiet(b_s, b_s + ov / SR):
+            hi, short_out = 0, True
+        s0 = int(a_s * SR) - lo; s1 = int(b_s * SR) + hi
         y = src[max(0, s0):s1].copy()
         if s0 < 0:
             y = np.concatenate([np.zeros((-s0, 2), np.float32), y])
         if len(y) > 4 * ov:
             if lo:
                 y[:2 * ov] *= fin[:, None]
+            elif short_in:
+                y[:nf] *= sin_[:, None]
             if hi:
                 y[-2 * ov:] *= fout[:, None]
+            elif short_out:
+                y[-nf:] *= sout[:, None]
         t0 = int(p["tl"][0] / fps * SR) - lo
         if t0 < 0:
             y = y[-t0:]; t0 = 0

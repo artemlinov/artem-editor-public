@@ -4,6 +4,10 @@
   python3 lanes/premiere/ripple.py --hygiene [--from <s>]        # only the A1 crossfade check-and-fix
   python3 lanes/premiere/ripple.py --close <T>                   # close the hole on V1 that ends at T: every clip on every
                                                                  # track starting at/after T moves left by the hole's length
+  python3 lanes/premiere/ripple.py --tighten <T>:<frames> [--dry] # shorten the hole on V1 that ends at T by <frames> (a chapter
+                                                                 # gap landing on a music beat): a clip ending inside the removed
+                                                                 # window is trimmed to its new end, everything at/after T moves
+                                                                 # left; refuses if a moved clip would land on a clip that stays
 
 For each change (applied last first, so earlier times stay valid): every clip on every track that starts at/after T moves
 by <frames> (latest first), then the A-roll gets the room: `tail` = the V1/A1 clip ENDING at T plays <frames> more of its
@@ -29,6 +33,32 @@ if "--close" in a:
  L.sort(function(x,y){return x.start.seconds-y.start.seconds});var d=new Time();d.ticks=String(D*TPF);for(var j=0;j<L.length;j++)L[j].move(d);
  app.project.save();return "closed "+(-D)+" frames before "+T+": "+L.length+" clips moved"})()''' % (TPF, T), timeout=900000))
     print(crossfade_hygiene(T - 2)); sys.exit(0)
+if "--tighten" in a:
+    T, D = a[a.index("--tighten") + 1].split(":"); T = float(T); D = int(D)
+    if D <= 0:
+        sys.exit("--tighten <T>:<positive frames>")
+    DRY = "--dry" in a
+    if not DRY:
+        backup("before tightening a gap")
+    print(run('''(function(){var s=app.project.activeSequence,TPF=%d,FPS=30000/1001,T=%f,D=%d,DRY=%s,log=[],bad=[];
+ var TF=Math.round(T*FPS),W=(TF-D)/FPS,v=s.videoTracks[0];
+ for(var i=0;i<v.clips.numItems;i++){var c=v.clips[i];if(c.start.seconds<T-0.002&&c.end.seconds>W+0.002)return "ERROR: V1 is not a hole from "+W.toFixed(3)+" to "+T}
+ function tracks(f){for(var t=0;t<s.videoTracks.numTracks;t++)f(s.videoTracks[t],"V"+(t+1));for(var t=0;t<s.audioTracks.numTracks;t++)f(s.audioTracks[t],"A"+(t+1))}
+ var L=[],TR=[];
+ tracks(function(tr,n){var stay=null,first=null;
+  for(var i=0;i<tr.clips.numItems;i++){var c=tr.clips[i];
+   if(c.start.seconds>=T-0.002){L.push(c);if(!first||c.start.seconds<first.start.seconds)first=c}
+   else if(c.end.seconds>W+0.002){if(c.end.seconds<=T+0.002)TR.push([c,n]);else if(!stay||c.end.seconds>stay.end.seconds)stay=c}}
+  if(stay&&first&&first.start.seconds-D/FPS<stay.end.seconds-0.002)bad.push(n+": "+first.name+" would land on "+stay.name)});
+ if(bad.length)return "REFUSED: "+bad.join("; ");
+ for(var k=0;k<TR.length;k++)log.push("trim "+TR[k][1]+" "+TR[k][0].name+" end "+TR[k][0].end.seconds.toFixed(3)+" -> "+W.toFixed(3));
+ log.push("move "+L.length+" clips left "+D+" frames");if(DRY)return log.join(" | ");
+ var e=new Time();e.ticks=String((TF-D)*TPF);for(var k=0;k<TR.length;k++)TR[k][0].end=e;
+ L.sort(function(x,y){return x.start.seconds-y.start.seconds});var d=new Time();d.ticks=String(-D*TPF);for(var j=0;j<L.length;j++)L[j].move(d);
+ app.project.save();return log.join(" | ")})()''' % (TPF, T, D, "true" if DRY else "false"), timeout=900000))
+    if not DRY:
+        print(crossfade_hygiene(T - 2))
+    sys.exit(0)
 CH = []
 for x in [x for x in a if ":" in x]:
     T, n, kind = x.split(":"); n = int(n)

@@ -55,8 +55,11 @@ in the job folder too: `ed where` prints it.
 ```
 
 - `src`: source seconds of the take you chose, roughly from its first word to its last (`islands.txt` times are
-  fine). The tool finds the clean in point (about a frame before the sound), the out point after the last soft
-  consonant, and takes out dead air of 0.45 s or more inside it.
+  fine, within about half a second). The tool finds the line's first and last word there in a fresh word-timed
+  transcript, cuts in on the first word's attack and out after the last soft consonant, never into the attempt before
+  or after (where the speaker ran straight on, it cuts in the dip between the words), and takes out dead air of 0.45 s
+  or more inside it. Where `text` starts with a restart ("somewhere around, somewhere around a minute"), it picks the
+  start that goes on with the line.
 - `text`: what the line should say. The tool transcribes exactly what the cut plays and lists missing or extra words.
 - `room`: extra seconds of the take's own silence after the line (a line that has to sink in).
 - `drop`: source spans to cut out of the take (a stumble, a breath).
@@ -65,8 +68,11 @@ in the job folder too: `ed where` prints it.
 - `clip`: a played clip with its own picture and sound instead of the A-roll.
 - Order = the order in the video.
 
-`cut_report.txt` marks each line OK or CHECK: missing / extra words, or `LATER TAKE?` when the same line is said
-again right after the out point (that later take is usually the one to use). Fix `takes.json` and run `ed cut` again.
+`cut_report.txt` marks each line OK or CHECK: missing / extra words, `LATER TAKE?` when the same line is said
+again right after the out point (that later take is usually the one to use), or `SAID TWICE?` when a word of the line
+is heard twice (a stutter, a restart, or the end of another attempt at an edge; it listens once more without the names
+prompt, which hides repeats). Fix `takes.json` (`src`, `drop`) and run `ed cut` again, before building any visual.
+Never mute or patch `voice.wav` or `mix.wav` to hide a problem: it leaves silence while the mouth moves.
 
 `timeline.txt` is the cut in **output frames**, the numbers every graphic, move and sound uses:
 `L07 ‖  1439-1604  00:48.01  ends 1598  See,@1439 |most@1452 people@1458 ...` (‖ a line start, | a pause inside it,
@@ -89,7 +95,9 @@ puts the **live A-roll** inside the graphic (the speaker card beside a screen re
 into). Return `null` on frames without it. The compositor fills it frame-exact from the footage.
 
 Rules that keep renders clean and fast:
-- Every frame depends only on `f`. No CSS transitions or animations, no timers, no `Date.now()`.
+- Every frame depends only on `f`. No CSS transitions or animations, no timers, no `Date.now()`. Frames are drawn in
+  parallel parts, out of order, so never rely on what an earlier call left on the page: set an element's text before
+  you measure it to center it.
 - Play videos as image sequences (`ed frames`), swapping an `<img>` per frame, never a `<video>` element. Extract
   them at the size they're shown (`--height`): full 4K frames for a card 900 px tall only slow the render down.
 - Preview any stretch with its sound before the full build: `ed compose plan.json --range F0:F1`.
@@ -125,7 +133,10 @@ the speech loudness.
 Tested on the video 14 raw take (51 min, 4K 29.97) on an M1 Max, 2026-11-16:
 - `ed transcribe`: 410 islands in about 6 minutes.
 - `ed cut` with 127 lines: 2.5 minutes; in and out points within a few frames of run 2's approved cut, in points
-  tighter where run 2 left silence before the first word.
+  tighter where run 2 left silence before the first word. Since 2026-11-17 it finds each edge from the line's own
+  words and listens again without the names prompt: about 7.5 minutes for the 127 lines of run 3, which fixed every
+  cut mistake Artem noted in that run (clipped last words, the tail of the attempt before playing first, a doubled
+  word, a breath and a turn away after a line) with no new ones.
 - `ed render` at 4K: 6-16 frames a second depending on the page (heavy image sequences are the slow part).
 - `ed compose`: the 9-minute 4K video in 6.5 minutes; `ed review` 3 minutes.
 
