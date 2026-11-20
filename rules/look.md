@@ -9,7 +9,7 @@
 - Full-screen explainers (e.g. "shot map"): simple, digestible concept visuals; he wants more inventive ones from code.
 - Feel: magical, UI-styled, "AI software company". Keep compositions centered so eyes don't jump.
 - Everything that matters stays about 6% in from the frame edges (2026-11-11: UI pieces and thumbnails touching the edges looked wrong).
-- Motion level (2026-11-11): about 6/10, a polished YouTube explainer, not a motion-design reel. Springy entrances with a slight overshoot and better-designed layouts did the most; subtle camera drift is fine; heavy 3D tilts look cheap; no motion blur (too slow to render). Hard cuts stay the default, with simple designed hand-offs (A-roll falls back, or shrinks into a card) at big moments.
+- Motion level (2026-11-11): about 6/10, a polished YouTube explainer, not a motion-design reel. Springy entrances with a slight overshoot and better-designed layouts did the most; subtle camera drift is fine; heavy 3D tilts look cheap, and so does a flat wall tilted at an angle (video 14 pass 3: a 10° tilted wall of thumbnails, "I don't like this"; grids stay straight); no motion blur (too slow to render). Hard cuts stay the default, with simple designed hand-offs (A-roll falls back, or shrinks into a card) at big moments.
 - Centered at every moment, not just in the final layout: when an element enters later (a timeline under two clips, a second card beside the first), whatever is on screen before it is centered and sized for the space it has alone (larger, vertically centered), then re-lays out (house spring, ω 7.5) to make room as the new element enters. Never leave empty space waiting for something that hasn't arrived yet. The same goes for a key image inside a screen recording: center it (open it big) rather than leaving it at the edge of the window.
 - Rebuild screen recordings in code where it looks cleaner; recreate Everygen's generation animation faithfully.
 - Proof: a concrete reference (a tool, an output, a stat, a past video) shows the real thing: the real UI or output, which may be rebuilt in code as long as it stays that same thing. Invented concept visuals are only for abstract ideas.
@@ -83,3 +83,4 @@
     (eyebrow, big title, a time chip), like "Build Your First AI Agent in 20 Minutes".
   - A concept that runs through a section keeps one icon (the office = a house: on the memory card, next to the folder, next
     to its name once opened).
+- A still grid is not finished (video 14 pass 3, his 100+ videos grid): give it movement that serves the line, e.g. the camera pulls back to reveal another layer while he says "over a hundred", then pushes back in as the centre card turns into the next number.

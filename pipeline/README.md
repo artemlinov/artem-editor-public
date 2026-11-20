@@ -40,10 +40,12 @@ Artem only says which video and where the camera file is. Claude does the rest, 
 **Premiere** (`lanes/premiere/`, every write backs up the project first and reads back after; all proven live 2026-11-11 on a throwaway project)
 - `new-project.py`: the video's Premiere project and sequence (see Starting a video).
 - `dump-live.py`: the live sequence, every clip and property, to `work/dump.json`. Run before every apply: Artem edits between rounds.
+- `dump-diff.py old.json new.json [--tracks A4-A8]`: what he changed between two reads (removed, added, moved, switched off, levels, effects such as a pitch shifter, keyframes), with his ripples accounted for. Clip Gain is not in a dump: pair it with `prproj-audit.py`.
 - `relay.py`: applies `work/relay-plan.json`. Moves everything after T0, re-lays the A-roll piece by piece, fixes crossfades. A piece may name another camera file (`path`), and the plan may list clips to remove. It re-lays V1 from T0, so clip-level settings there (a punch-in scale) must be put back after.
 - `ripple.py T:frames:tail|head`: more room after (or before) a line, without breaking what follows. `--close <T>` closes a hole on V1 that ends at T. `--tighten <T>:<frames>` shortens that hole by some frames instead (a chapter gap landing on a music beat). Moving hundreds of clips takes Premiere over 15 minutes: the bridge times out while Premiere keeps working, so wait and read the timeline before the next write. `--hygiene` only fixes crossfades.
 - `swap-take.py T:srcIn:srcOut`: replaces ONE A-roll clip with another stretch of the camera file (another take, other edges) and ripples what follows. Use it instead of `relay.py` once Artem has worked on the timeline: nothing else on V1/A1 is re-laid, so his clip settings stay. Lists the clips that span the join (a song, a graphic) for re-timing.
 - `place-rows.py rows.json`: lays graphics, music or sounds frame-exact, then reads them back.
+- `place-pass.py <pass> <worker> ...`: a revision round's graphics workers onto the live timeline (their `work/place/<pass>-<worker>.json` rows, old clips and the sounds in their `remove_sfx` spans out); `--with-cues` also lays their sound cues, otherwise those wait for a sound pass.
 - `zoom-keys.py <t0>:<t1>:<scale>`: a small eased push-in on the A-roll over a breath or pause, anchored between his eyes.
 - `sfx-tracks.py cues.json`: puts each sound on the first free SFX track, then `place-rows`.
 - `prproj-audit.py`: Clip Gain and every transition, read straight from the saved project file.
@@ -59,8 +61,9 @@ Artem only says which video and where the camera file is. Claude does the rest, 
 - `presets/graphics/progression-graph/render_page.py`: one appearance of the progression graph.
 
 **Sound** (`pipeline/sound/`)
-- `beds.py beds-plan.json`: music beds at Artem's level (body at -39 dBFS), quiet intros lifted, dry cut into a reverb throw. No remix.
-- `sfxcues.py <cues.json> ...`: sound cue lists (what happens, when: written by whoever builds a graphic) into rows for `sfx-tracks.py`: the file, level and slice for each kind of sound, its transient put on the cue.
+- `beds.py beds-plan.json`: music beds at Artem's level (body at -39 dBFS), quiet intros lifted, dry cut into a reverb throw. No remix. `"card": <first word>` lifts a bed through a chapter card the way he did (+6.7 dB, back by his first word).
+- `sfxboard.py palette.json <out dir>`: the sound palette Artem picks from before a sound pass (library picks plus sounds generated with Everygen's `generate_audio`, no model = Seed Audio, 1 credit): one labelled listening video (role, letter, my pick marked) plus each option as a one-shot. A "bad" twin is the same sound with `"pitch": -5`.
+- `sfxcues.py <cues.json> ...`: sound cue lists (what happens, when: written by whoever builds a graphic) into rows for `sfx-tracks.py`: the file, level and slice for each kind of sound, its transient put on the cue. Every kind rotates through at least three files (his library first), so no sound plays twice in a row; `good` / `bad` are a sound and its darker twin, `notify` the iPhone ding.
 
 **Review** (`pipeline/review/`)
 - `preview.py`: a graphic with his voice under it (1080p, or `--height 360` for quick blockouts).

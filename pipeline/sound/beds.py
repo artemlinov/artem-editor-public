@@ -12,7 +12,11 @@ beds-plan.json: [{"key": "bed-step2", "song": "song5-step2.wav" (in <job>/music)
                   "ref": [song s, song s] a typical stretch of the body, for the level,
                   "target": -39 (calm) | -41..-43 (higher energy),
                   "lift": song s, the quiet intro is lifted until here (to within ~4 dB of the body),
-                  "spans": [[bed s, bed s, margin dB], ...] other quiet stretches to lift}]
+                  "spans": [[bed s, bed s, margin dB], ...] other quiet stretches to lift,
+                  "card": [timeline s of the first word after a chapter card] the music comes UP through the card}]
+Chapter cards (video 14, his own keys on the first one: "See how I raise the music here slightly so please do the same for
+other transitional segments"): a bed that starts on a chapter card plays +6.7 dB from its start and comes back to its level
+from 0.375 s before his first word to 0.315 s after it (linear in dB).
 Level: the body's 85th-percentile 0.5 s RMS lands on `target` dBFS (video 12: -39 calm, ~19 dB under speech).
 Lay the result with lanes/premiere/place-rows.py (bin "Music", the music track); judge it with pipeline/review/musicmix.py.
 """
@@ -22,6 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from job import J  # noqa: E402
 
 SR = 48000
+CARD_LIFT_DB = 6.73
 
 
 def load(f):
@@ -97,6 +102,10 @@ def bake(b):
         y = lift(y, target, 0, b["lift"] - off, 4.0)
     for t0, t1, m in b.get("spans", []):
         y = lift(y, target, t0, t1, m)
+    if b.get("card"):                              # his chapter-card lift
+        t = np.arange(len(y)) / SR + b["start"]; a0, a1 = b["card"] - .375, b["card"] + .315
+        gc = np.where(t < a0, CARD_LIFT_DB, np.where(t > a1, 0.0, CARD_LIFT_DB * (a1 - t) / (a1 - a0)))
+        y = y * (10 ** (gc / 20))[:, None]
     nz = np.where(np.abs(y).max(1) > 1e-4)[0]; y = y[:nz[-1] + 1]
     f = int(.01 * SR); y[:f] *= np.linspace(0, 1, f)[:, None]
     p = os.path.join(J.music, f"{b['key']}.wav"); write(p, y)

@@ -26,7 +26,9 @@ def voice(t0, dur, wav):
     for i, (s, d, o) in enumerate(S):
         ms = int(round(o * 1000)); inp += ["-ss", f"{s:.4f}", "-t", f"{d:.4f}", "-i", AR]
         flt.append(f"[{i}:a]aformat=channel_layouts=stereo,adelay={ms}|{ms},apad=whole_dur={dur:.3f}[a{i}]")
-    mix = "".join(f"[a{i}]" for i in range(len(S))) + f"amix=inputs={len(S)}:normalize=0,atrim=0:{dur:.3f}[aout]"
+    mix = "".join(f"[a{i}]" for i in range(len(S))) + f"amix=inputs={len(S)}:normalize=0,asetpts=N/SR/TB,atrim=0:{dur:.3f}[aout]"
+    # asetpts: with ffmpeg 9 a span that starts in a V1 gap (a chapter card) lost its leading silence in atrim, so his
+    # voice played early by the gap's length (pass-3 barsend worker, 2026-11-20)
     subprocess.run(["ffmpeg", "-v", "error", "-y", *inp, "-filter_complex", ";".join(flt) + ";" + mix, "-map", "[aout]", "-ar", "48000", wav], check=True)
 
 

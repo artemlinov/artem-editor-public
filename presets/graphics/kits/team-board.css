@@ -1,0 +1,100 @@
+/* Worker `team` (video 14): the Step 2 team board, its overlay strip (B18-B19) and the browser of B26.
+   Everything is positioned by team-board.js as a pure function of timeline time; this file is only the look. */
+.tm,.tm-g{position:absolute;inset:0}
+.tm-wash{position:absolute;inset:0;opacity:0;background:
+  radial-gradient(1100px 760px at 34% 88%,rgba(0,117,253,.20),transparent 70%),
+  radial-gradient(900px 600px at 80% 6%,rgba(0,117,253,.10),transparent 70%),
+  linear-gradient(180deg,rgba(232,243,255,.0),rgba(214,232,255,.55))}
+.tm svg.w{position:absolute;left:0;top:0;overflow:visible}
+/* his live camera */
+.tm-cam{position:absolute;overflow:hidden;background:#0b0c10;z-index:30}
+.tm-cam img{position:absolute;display:block;max-width:none}
+/* tiles: a dashed (empty) layer under a solid one, a blue ring, one ripple */
+.tm-tile{position:absolute}
+.tm-tile>.d,.tm-tile>.s,.tm-tile>.ring,.tm-tile>.clip{position:absolute;inset:0;border-radius:inherit}
+.tm-tile>.d{background:rgba(255,255,255,.5);border:3px dashed #C4CAD6;box-sizing:border-box}
+.tm-tile>.s{background:#fff;box-shadow:0 24px 60px rgba(16,48,94,.13),0 2px 8px rgba(16,48,94,.06)}
+.tm-tile>.ring{opacity:0}
+.tm-tile>.rip{position:absolute;border:3px solid #0075FD;opacity:0;box-sizing:border-box}
+.tm-tile>.clip{overflow:hidden}
+.tm-tile .ic{position:absolute;left:50%;top:50%;display:flex}
+.tm-tile .ic svg{width:100%;height:100%;display:block}
+.tm-tile img.logo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block}
+.tm-bdg{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;border:4px solid #F4F6FB;box-sizing:content-box}
+.tm-bdg svg{width:62%;height:62%}
+.tm-num{position:absolute;left:-11px;top:-11px;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:600;color:#fff;border:4px solid #F4F6FB;
+  box-shadow:inset 0 2px 2px rgba(255,255,255,.45),inset 0 -4px 7px rgba(0,30,90,.22)}
+.tm-lab{position:absolute;white-space:nowrap;transform:translate(-50%,-50%);font-weight:500;color:#8B8F9A;letter-spacing:-.005em}
+.tm-pill{position:absolute;display:flex;align-items:center;justify-content:center;gap:.42em;white-space:nowrap;border-radius:999px;font-weight:600;letter-spacing:-.005em;color:#fff;
+  background:linear-gradient(180deg,#2B8CFF 0%,#0075FD 55%,#0067E6 100%);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.45),0 10px 26px rgba(0,98,224,.32)}
+.tm-pill.cc{background:linear-gradient(180deg,#2B2F38,#1C1E22);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.18),0 10px 26px rgba(16,24,40,.30)}
+.tm-pill.cc img{height:1.05em;display:block;image-rendering:pixelated}
+.tm-clock{position:absolute;border-radius:50%;background:#fff;box-shadow:0 10px 26px rgba(16,48,94,.18),0 0 0 3px #1C1E22 inset}
+.tm-clock i{position:absolute;left:50%;bottom:50%;width:3.5px;margin-left:-1.75px;border-radius:2px;background:#1C1E22;transform-origin:50% 100%}
+.tm-clock b{position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px;border-radius:50%;background:#0075FD}
+/* seat illustrations (300 x 170, clipped by the tile) */
+.tm-ill{position:absolute;left:50%;top:50%;width:300px;height:170px;margin:-85px 0 0 -150px}
+.tm-ill *{position:absolute;box-sizing:border-box}
+.tm-ill .bar{border-radius:3px;transform-origin:50% 50%}
+.tm-ill .wd{border-radius:7px;height:22px}
+.tm-ill .mc{background:#fff;border-radius:14px;box-shadow:0 8px 22px rgba(16,48,94,.16),0 0 0 1.5px rgba(16,48,94,.07)}
+.tm-ill .gb{border-radius:5px;background:#D5DBE6}
+.tm-ill .lane{border-radius:10px}
+/* tools */
+.tm-tool{position:absolute}
+.tm-tool>.o{position:absolute;inset:0;border-radius:inherit;box-sizing:border-box}
+.tm-tool>.o.need{background:#F2F8FF;border:3px dashed #7DB4FF}
+.tm-tool>.o.built{background:#fff;border:3px solid #2B2F38;box-shadow:0 10px 24px rgba(16,24,40,.12)}
+.tm-tool>.o.red{background:#FFF0F0;border:3px solid #E5484D;box-shadow:0 10px 24px rgba(229,72,77,.18)}
+.tm-tool>.o.grn{background:#EAF8F0;border:3px solid #30A46C;box-shadow:0 10px 24px rgba(48,164,108,.18)}
+.tm-tool>.o.eg{background:radial-gradient(120% 120% at 30% 18%,#7DB8FF 0%,#2B86FF 40%,#0062E0 100%);box-shadow:inset 0 2px 3px rgba(255,255,255,.55),inset 0 -6px 10px rgba(0,40,120,.30),0 12px 26px rgba(0,98,224,.34)}
+.tm-tool>.row{position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-start;overflow:hidden;border-radius:inherit}
+.tm-tool .ti{flex:none;display:flex;align-items:center;justify-content:center}
+.tm-tool .ti svg{width:38px;height:38px;display:block}
+.tm-tool .tx{white-space:nowrap;font-size:25px;font-weight:600;letter-spacing:-.01em;padding-right:22px}
+.tm-tool svg.pr{position:absolute;left:0;top:0;overflow:visible}
+.tm-tool .crack{position:absolute;left:0;top:0;overflow:visible}
+.tm-pin{position:absolute;width:10px;height:10px;margin:-5px;border-radius:50%;background:#0075FD;box-shadow:0 0 0 4px rgba(0,117,253,.16)}
+/* Everygen toolkit */
+.tm-tray{position:absolute;border-radius:36px;background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(236,245,255,.92));box-shadow:0 0 0 3px #0075FD,0 0 0 12px rgba(0,117,253,.12),0 30px 70px rgba(0,98,224,.22)}
+.tm-row{position:absolute;display:flex;align-items:center;white-space:nowrap}
+.tm-kit{display:flex;align-items:center;gap:14px;font-size:34px;font-weight:600;letter-spacing:-.015em;color:#1C1E22}
+.tm-kit img{height:44px;display:block}
+.tm-kit .serif{font-size:37px;color:#0075FD;letter-spacing:-.01em}
+.tm-plus{font-size:34px;font-weight:500;color:#8FA6C4;text-align:center}
+.tm-prin{position:relative;display:flex;align-items:center;gap:12px;height:60px;padding:0 24px 0 14px;border-radius:30px;background:#fff;font-size:28px;font-weight:600;letter-spacing:-.01em;color:#1C1E22;
+  box-shadow:0 12px 30px rgba(16,48,94,.14),0 2px 6px rgba(16,48,94,.06)}
+.tm-prin .pi{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 35% 28%,#7DB8FF 0%,#2B86FF 38%,#0062E0 100%);box-shadow:inset 0 2px 3px rgba(255,255,255,.55),inset 0 -4px 8px rgba(0,40,120,.35)}
+.tm-prin .pi svg{width:23px;height:23px}
+.tm-prin .yr{display:inline-flex;align-items:center;height:36px;padding:0 13px;border-radius:18px;background:#E8F3FF;color:#0075FD;font-size:23px;font-weight:600;margin-left:2px}
+.tm-prin .ring{position:absolute;inset:0;border-radius:30px;box-shadow:0 0 0 4px #0075FD,0 0 0 13px rgba(0,117,253,.13);opacity:0}
+.tm-beam{position:absolute;width:8px;border-radius:4px;background:linear-gradient(180deg,rgba(255,255,255,0),#fff 18%,#fff 82%,rgba(255,255,255,0));box-shadow:0 0 34px 14px rgba(0,117,253,.55),0 0 120px 46px rgba(0,117,253,.28)}
+/* copyright claim (YouTube Studio's red) */
+.tm-claim{position:absolute;display:flex;align-items:center;gap:14px;height:76px;padding:0 26px 0 16px;border-radius:20px;background:#fff;white-space:nowrap;font-size:29px;font-weight:600;color:#C5221F;letter-spacing:-.01em;
+  box-shadow:0 0 0 3px #E5484D,0 18px 44px rgba(197,34,31,.30),0 3px 8px rgba(16,48,94,.10)}
+.tm-claim .cc{width:46px;height:46px;border-radius:50%;background:#E5484D;color:#fff;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:600;line-height:1}
+/* overlay strip over his full-screen camera */
+.tm-ovg{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 56%,rgba(0,0,0,.34) 76%,rgba(0,0,0,.66) 100%)}
+.tm-ot{position:absolute;border-radius:26%;background:#fff;box-shadow:0 16px 40px rgba(0,0,0,.42),0 2px 6px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center}
+.tm-ot img{display:block}.tm-ot svg{display:block}
+.tm-ot.eg{background:none;overflow:visible}
+.tm-ot.eg img{width:100%;height:100%;border-radius:26%;box-shadow:0 16px 40px rgba(0,60,160,.5)}
+.tm-ot .ring{position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 4px #0075FD,0 0 0 12px rgba(0,117,253,.30);opacity:0}
+.tm-ot .rip{position:absolute;inset:0;border-radius:inherit;border:3px solid #5AA9FF;opacity:0;box-sizing:border-box}
+.tm-ot .shine{position:absolute;inset:0;border-radius:26%;overflow:hidden}
+.tm-ot .shine i{position:absolute;top:-20%;height:140%;width:42%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.85),rgba(255,255,255,0));transform:skewX(-18deg)}
+.tm-team{position:absolute;border-radius:30px;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 2px rgba(255,255,255,.34);backdrop-filter:none}
+/* browser window (B26) */
+.tm-br{position:absolute;border-radius:16px;background:#fff;overflow:hidden;box-shadow:0 34px 90px rgba(16,48,94,.22),0 4px 12px rgba(16,48,94,.10),0 0 0 1px rgba(16,48,94,.10);font-family:-apple-system,"SF Pro Text","Helvetica Neue",sans-serif}
+.tm-br .strip{position:absolute;left:0;right:0;top:0;background:#E4E7EC}
+.tm-br .tl3{position:absolute;display:flex}.tm-br .tl3 i{border-radius:50%;background:#FF5F57;display:block}.tm-br .tl3 i+i{background:#FEBC2E}.tm-br .tl3 i+i+i{background:#28C840}
+.tm-br .tab{position:absolute;background:#fff;display:flex;align-items:center;white-space:nowrap;color:#1F2328;font-weight:500;overflow:hidden}
+.tm-br .tab .fav{flex:none;border-radius:22%;background:#0b0b0b center/72% no-repeat}
+.tm-br .tab .x{position:absolute;display:flex;align-items:center;justify-content:center;border-radius:50%;color:#5F6368}
+.tm-br .bar{position:absolute;left:0;right:0;background:#fff;border-bottom:1px solid #E3E5E8}
+.tm-br .url{position:absolute;background:#F0F2F5;border-radius:999px;display:flex;align-items:center;color:#1F2328;white-space:nowrap}
+.tm-br .url b{font-weight:400;color:#6B7078}
+.tm-br .nav{position:absolute;display:flex;align-items:center;color:#5F6368}
+.tm-br .page{position:absolute;left:0;right:0;bottom:0;overflow:hidden;background:#F0EFEA}
+.tm-br .page img{position:absolute;left:0;top:0;width:100%;display:block}
+.tm-cur{position:absolute;z-index:40;filter:drop-shadow(0 3px 5px rgba(0,0,0,.35))}
