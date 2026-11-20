@@ -62,7 +62,6 @@ Artem only says which video and where the camera file is. Claude does the rest, 
 
 **Sound** (`pipeline/sound/`)
 - `beds.py beds-plan.json`: music beds at Artem's level (body at -39 dBFS), quiet intros lifted, dry cut into a reverb throw. No remix. `"card": <first word>` lifts a bed through a chapter card the way he did (+6.7 dB, back by his first word).
-- `sfxboard.py palette.json <out dir>`: the sound palette Artem picks from before a sound pass (library picks plus sounds generated with Everygen's `generate_audio`, no model = Seed Audio, 1 credit): one labelled listening video (role, letter, my pick marked) plus each option as a one-shot. A "bad" twin is the same sound with `"pitch": -5`.
 - `sfxcues.py <cues.json> ...`: sound cue lists (what happens, when: written by whoever builds a graphic) into rows for `sfx-tracks.py`: the file, level and slice for each kind of sound, its transient put on the cue. Every kind rotates through at least three files (his library first), so no sound plays twice in a row; `good` / `bad` are a sound and its darker twin, `notify` the iPhone ding.
 
 **Review** (`pipeline/review/`)

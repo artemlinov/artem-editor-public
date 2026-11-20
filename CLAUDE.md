@@ -47,5 +47,6 @@ it gets onto that surface. Never put app mechanics in a preset.
 ## Rules
 - **Claude never changes the script.** The only selection decision is which take to use (`rules/takes.md`).
 - Add a rule only where Claude's own reasoning would get it wrong. Teach taste case by case; never log things for the sake of logging.
+- **Prune as you add (Artem, 2026-11-20: "we're not always adding adding adding… we're removing things based on the learnings too").** A new rule, tool or kit replaces or merges what it supersedes: rewrite the old line, don't stack a new one beside it. At a video's end, also remove tools no video used for the last two, rules a newer one replaced, and lines repeated across `rules/` and the two skills.
 - After every finished edit, offer to write what Artem corrected back into the preset or `rules/`.
 - Pricing on screen follows what Artem says in that video's script and the pricing screenshot he gives for it. The site A/B tests its prices, so never take numbers from the live page or from an older video.

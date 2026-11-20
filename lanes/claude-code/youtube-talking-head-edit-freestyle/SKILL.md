@@ -328,17 +328,15 @@ generate; line their pockets up once the cut is final.
 - A real click or typing on screen gets that real sound. Everything else (whooshes, risers, impacts, UI sounds) is
   your sound design.
 - Trim each sound to its event and place it on it.
-- One click or pop heard again and again gets tiring: rotate a repeating sound through a few similar variants matched
-  in loudness, about 3 dB lower than a one-off.
 - Good and bad twins: when two elements carry the same weight but one is good and the other bad (a green cell and a
   red one, a tick and a cross), both get a sound, and the two are told apart: the bad one is the same sound made darker
   (pitched down, duller). Look for these pairs in every graphic.
 - The hook is the exception to sparse: every change on its opening title card gets a sound (each word a small click,
   the key word a bigger one), and a scene showing work being done should sound like it is happening right now (each
   click on screen a real mouse click, panned to where it happens, quiet).
-- Variety: every kind of sound (whoosh, pop, reveal) rotates through at least three different files, so the same one
-  never plays twice in a row; the same whoosh fifty times is what makes an edit sound cheap. A notification on screen
-  gets a real notification sound (a phone ding), not a UI pop.
+- Variety: every kind of sound (whoosh, pop, reveal) rotates through at least three different files matched in
+  loudness, so the same one never plays twice in a row; the same whoosh fifty times is what makes an edit sound
+  cheap. A notification on screen gets a real notification sound (a phone ding), not a UI pop.
 - Effects are felt, not heard: barely audible, so you'd miss them if they were gone but don't notice them. Set each
   one against the voice, not against the file's own level: as a start, a whoosh or hit peaks about 14 dB under the
   speech's loudness, a pop or click about 20 dB under (both measured in LUFS). When in doubt, go quieter.
